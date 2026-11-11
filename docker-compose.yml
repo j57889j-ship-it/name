@@ -1,0 +1,44 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: dasturlash_ai
+      POSTGRES_USER: bot
+      POSTGRES_PASSWORD: local_bot_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bot -d dasturlash_ai"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  bot:
+    build: .
+    env_file: .env
+    environment:
+      BOT_MODE: polling
+      DATABASE_URL: postgresql://bot:local_bot_password@postgres:5432/dasturlash_ai
+      REDIS_URL: redis://redis:6379/0
+      WEBHOOK_BASE_URL: http://localhost
+      PORT: 10000
+    ports:
+      - "10000:10000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

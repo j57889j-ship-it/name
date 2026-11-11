@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: dasturlash-ai-control
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m bot.main
+    healthCheckPath: /health
+    envVars:
+      - key: BOT_MODE
+        value: webhook
+      - key: PORT
+        value: "10000"
+      - key: BOT_TOKEN
+        sync: false
+      - key: ADMIN_IDS
+        sync: false
+      - key: CHANNEL_ID
+        sync: false
+      - key: CHANNEL_USERNAME
+        value: dasturlash_ai
+      - key: DATABASE_URL
+        sync: false
+      - key: REDIS_URL
+        sync: false
+      - key: WEBHOOK_SECRET
+        generateValue: true
+      - key: AI_PROVIDER
+        value: openai
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-5.4-mini
+      - key: TIMEZONE
+        value: Asia/Tashkent
+      - key: SUBSCRIPTION_REQUIRED
+        value: "true"
+      - key: EFFECTS_ENABLED
+        value: "true"
+      - key: AUTO_REACTION_ENABLED
+        value: "true"
+      - key: ANTI_SPAM_SECONDS
+        value: "30"

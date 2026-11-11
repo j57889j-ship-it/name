@@ -1,0 +1,10 @@
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-q"
+
+[project]
+name = "dasturlash-ai-control-bot"
+version = "1.0.0"
+description = "Admin-only Telegram channel control center"
+requires-python = ">=3.11"
